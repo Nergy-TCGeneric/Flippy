@@ -14,6 +14,8 @@ Class Level
 	Field colorrule:Float[][]
 	Field canvas:Canvas
 	Field colormgr:TileColor
+	Field score:Int
+	Field gamemodestrategy:GameMode
 	
 	Public
 	Method New(rows:Int, cols:Int, colorrule:Float[][])
@@ -23,6 +25,7 @@ Class Level
 		Self.colorrule = colorrule
 		Self.canvas = New Canvas
 		Self.colormgr = New TileColor()
+		score = 0
 		InitializeTiles()
 	End Method
 	
@@ -38,6 +41,7 @@ Class Level
 				canvas.DrawRect(t.x, t.y, t.size, t.size)
 			Next
 		Next
+		canvas.DrawText("Score: " + score, 540, 40)
 		canvas.Flush
 		
 		Local touched:Tile = Null
@@ -70,6 +74,7 @@ Class Level
 	Private
 	Method InitializeTiles:Void()
 		Seed = Millisecs()
+		#Rem
 		For Local i:Int = 0 Until rows	' Rows first, columns last.
 			For Local j:Int = 0 Until cols
 				' Don't randomly generate tiles at first. Try to make every adjacent tile's color is different
@@ -79,11 +84,23 @@ Class Level
 				tilegrid[i*cols + j] = t
 			Next
 		Next
+		#End
+		
+		' Initialize phase
+		Local avaidx:Int[] = New Int[rows * cols]
+		For Local i:= Eachin avaidx
+			i = 1
+		Next
+		
+		Local placecomplete:Bool = False
+		Repeat
+			' Code goes here
+		Until placecomplete
 	End Method
 	
 	Method GravitateTiles:Void()
 		
-		For Local i:Int = cols - 1 To rows * cols ' TODO: Replace this stub number(5) to actual column number.
+		For Local i:Int = cols - 1 To rows * cols
 			Local count:Int = 0
 			Repeat
 				For Local j:Int = i To i - cols + 2 Step -1
@@ -118,13 +135,14 @@ Class Level
 		Next
 	End Method
 	
-	' Assuming that tile grid is rectangular. If tile is destroyed, tile's color will be blank color(0, 0, 0).
+	' Assuming that tile grid is rectangular. If tile is destroyed, tile's color will be a blank color(0, 0, 0).
 	Method DestroySameColorTile:Void()
 		UnmarkDestroyableTiles()
 		MarkDestroyableTiles()
 		For Local i:Int = 0 Until cols * rows
 			If(tilegrid[i].willbedestroyed)
-				tilegrid[i].color = New Float[3]
+				tilegrid[i].color = New Float[3] ' 5 score per one tile
+				score += 5
 			Endif
 		Next
 	End Method
@@ -201,7 +219,7 @@ Class Level
 		Local rowadj:Int = 0
 		Local coladj:Int = 0
 		
-		' Column deletion
+		' Column deletion marking
 		For Local i:Int = 0 Until rows * cols
 			If(i Mod cols < cols - 1)
 				Local c1:Float[] = tilegrid[i].color
@@ -233,10 +251,10 @@ Class Level
 			EndIf
 		Next
 		
-		' Row deletion
-		For Local i:Int = 0 Until rows
+		' Row deletion marking
+		For Local i:Int = 0 Until rows - 1
 			For Local j:Int = 0 Until cols
-				If(j Mod cols < cols - 1)
+				If(j Mod cols < cols)
 					Local c1:Float[] = tilegrid[i + j * cols].color
 					Local c2:Float[] = tilegrid[i + (j + 1) * cols].color
 					
@@ -266,8 +284,6 @@ Class Level
 				EndIf
 			Next
 		Next
-		
-		' Search for tiles have same color in a row or col and destroy them.
 	End Method
 	
 	Method UnmarkDestroyableTiles:Void()

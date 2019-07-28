@@ -20,7 +20,7 @@ Class Game Extends App
 	
 	Method OnCreate:Int()
 		SetUpdateRate(60)
-		Local loader:LevelLoader = New LevelLoader ' TODO: Do tests first. if done, remove at release.
+		Local loader:LevelLoader = New LevelLoader
 		level = loader.LoadLevel()
 		Return 0
 	End Method
