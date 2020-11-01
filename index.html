@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flippy</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="index.css">
+        <script src="pixi.min.js"></script>
+    </head>
+    <body>
+        <div id="flippy-container"></div>
+        <script type="text/javascript">
+            const container = document.getElementById("flippy-container")
+            const TILES = []
+            const COLORS = [ 0x0048BA, 0xB0BF1A, 0x7CB9E8, 0xC0E8D5, 0xC46210, 0xE52B50, 0x3B7A57, 0xFFBF00 ]
+            const app = new PIXI.Application({
+                resizeTo: container
+            })
+            app.renderer.autoDensity = true;
+            app.renderer.resize(container.offsetWidth, container.offsetHeight);
+            container.appendChild(app.view)
+            for(let i=0;i<16;i++) {
+                let sprite = new PIXI.Sprite(PIXI.Texture.WHITE)
+                sprite.tint = COLORS[i % COLORS.length]
+                sprite.width = 100
+                sprite.height = 100
+                sprite.x = app.renderer.width / 3 + sprite.width * (i % 4)
+                sprite.y = app.renderer.height / 4 + sprite.height * Math.floor(i / 4)
+                sprite.interactive = true
+                sprite.on('pointerdown', (data) => {console.log("Sprite clicked!", data.target)})
+                TILES.push(sprite)
+                app.stage.addChild(sprite)
+            }
+        </script>
+    </body>
+</html>

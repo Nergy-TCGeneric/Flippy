@@ -1,0 +1,15 @@
+{
+  "name": "flippy",
+  "version": "0.0.1",
+  "description": "A tile-flipping arcade game.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "runserver": "http-server ./ -d false -c-1"
+  },
+  "author": "TCGeneric",
+  "repository": {
+    "type":"git",
+    "url": "https://github.com/tcgeneric/Flippy"
+  },
+  "license": "ISC"
+}
