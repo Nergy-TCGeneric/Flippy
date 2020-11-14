@@ -8,8 +8,11 @@
   },
   "author": "TCGeneric",
   "repository": {
-    "type":"git",
+    "type": "git",
     "url": "https://github.com/tcgeneric/Flippy"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
 }
